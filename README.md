@@ -1,5 +1,5 @@
 
-[Cover Photo](./readmeIMG.png)
+![Cover Photo](./readmeIMG.png)
 
 # UCA Daily Code Repository
 
