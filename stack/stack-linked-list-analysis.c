@@ -6,44 +6,42 @@
 #include <sys/time.h>
 
 
-int *arr = NULL;
+typedef struct Node {
+    
+    int val;
+    struct Node* next;
+
+} Node;
+
+Node *head = NULL;
 int N = 0;
-int max_size = 1;
 
-void resize(int new_size){
-
-    int *new_arr = (int *) malloc(new_size * sizeof(int));
-
-    for(int i = 0 ; i < N; i++){
-
-        new_arr[i] = arr[i];
-
-    }
-
-    free(arr);
-
-    arr = new_arr;
-
-    max_size = new_size;
-
-}
 
 void push(int n){
 
-    if(arr == NULL){
+    Node* temp = head;
 
-        arr = (int*) malloc(max_size * sizeof(int));
-
-    } 
-    else if(N == max_size){
-
-        resize(2 * max_size);
-
-    }
-
-    arr[N++] = n;
+    head = (Node*) malloc(sizeof(Node)); 
+    head -> val = n;
+    head -> next = temp;
+    N++;
 
 }
+
+int pop(){
+
+    if(N == 0) return INT_MIN;
+    Node* temp = head;
+    int val = head -> val;
+    head = temp -> next;
+    N--;
+    free(temp);
+    return val;
+
+}
+
+
+
 
 bool isEmpty(){
 
@@ -51,20 +49,7 @@ bool isEmpty(){
 
 }
 
-int pop(){
 
-    if(isEmpty()) return INT_MIN;
-    int num = arr[--N];
-    if(N > 0 &&  N == max_size / 4){
-
-        resize(max_size / 2);
-        max_size /= 2;
-
-    }
-
-    return num;
-
-}
 
 
 int size(){
@@ -90,8 +75,6 @@ void test_my_stack(){
     assert(pop() == 3);
     assert(size() == 0);
     assert(isEmpty());
-
-    free(arr);
     
 }
 
@@ -135,13 +118,11 @@ void track_behaviour(int stack_size){
 
     printf("%d\t\t %lld\t\t %lld\n", stack_size, push_time, pop_time);
 
-
-    free(arr);
-    arr = NULL;
     N = 0;
-    max_size = 1;
+    head = NULL;
 
 }
+
 
 
 int main(){
@@ -172,12 +153,10 @@ int main(){
 
 
 // Sample Size      Push Time       Pop Time
-// 100000           8               5
-// 200000           8               7
-// 400000           20              17
-// 800000           35              34
-// 1600000          66              44
-// 3200000          126             147
-// 6400000          166             170
-
-// array implementation is faster because of contiguos arrangement and better caching ability
+// 100000           20              12
+// 200000           40              19
+// 400000           67              32
+// 800000           109             48
+// 1600000          137             75
+// 3200000          372             164
+// 6400000          703             416
