@@ -1,0 +1,67 @@
+class Solution {
+private:
+    bool canPlace(int rowIndex, int colIndex, int size,vector<vector<int>> &board){
+        // checking for left same row
+        // row will be same only col dec
+        int dupCol = colIndex;
+        int dupRow = rowIndex;
+    
+        while(colIndex>=0){
+            if(board[rowIndex][colIndex]==1){
+                return false;
+            }
+            colIndex--;
+        }
+        colIndex = dupCol;
+
+        // checking for upper left diagonal
+        // row will decrese, also col
+        while(rowIndex>=0 && colIndex>=0){
+            if(board[rowIndex][colIndex]==1){
+                return false;
+            }
+            rowIndex--;
+            colIndex--;
+        }
+        colIndex = dupCol;
+        rowIndex = dupRow;
+
+        // checking for below left diagonal
+        // row will increase and col will decrease
+        while(rowIndex<size && colIndex>=0){
+            if(board[rowIndex][colIndex]==1){
+                return false;
+            }
+            rowIndex++;
+            colIndex--;
+        }
+
+        // hence can place
+        return true;
+
+    }
+    void placeNQueens(int col,int size, vector<vector<string>> &result, vector<string> dummy, vector<vector<int>> &board){
+        if(col == size){
+            result.push_back(dummy);
+            return;
+        }
+        // loop for traversing on rows
+        for(int i=0 ; i<size ; i++){
+            if(canPlace(i,col,size,board)){
+                board[i][col]=1;
+                dummy[i][col] = 'Q';
+                placeNQueens(col+1,size,result,dummy, board);
+                board[i][col]=0;
+                dummy[i][col] = '.';
+            }
+        }
+    }    
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> result;
+        vector<string> dummy(n, string(n, '.'));
+        vector<vector<int>> board(n, vector<int>(n,0));
+        placeNQueens(0, n, result, dummy, board);
+        return result;
+    }
+};

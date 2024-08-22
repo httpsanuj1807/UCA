@@ -1,0 +1,27 @@
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int rows = matrix.size();
+        int cols = matrix[0].size();
+
+        vector<vector<int>> copyMatrix(matrix);
+
+        for(int i=0 ; i<rows ; i++){
+            for(int j = 0; j<cols ; j++){
+                int ele = matrix[i][j];
+                if(ele == 0){
+                    // making changes to row
+                    for(int p = 0 ; p<cols ; p++){
+                        copyMatrix[i][p] = 0;
+                    }
+                    // making changes to col
+                    for(int p = 0 ; p<rows ; p++){
+                        copyMatrix[p][j] = 0;
+                    }
+                }
+            }
+        }
+
+        matrix = copyMatrix;
+    }
+};
